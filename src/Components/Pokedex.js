@@ -1,8 +1,13 @@
 import React from 'react'
 
-export const Pokedex = () => {
+export const Pokedex = (props) => {
+  const generation = props.generation;
+
   return (
-    <div>Pokedex</div>
+    <div>
+      <h3>Pokedex</h3>
+      <h3>{generation}</h3>
+    </div>
   )
 }
 
