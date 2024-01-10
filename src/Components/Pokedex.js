@@ -6,7 +6,8 @@ export const Pokedex = (props) => {
 
   const logData = () => {
     console.log(data);
-  -  }
+  }
+
   return (
     <div>
       <h3>Pokedex</h3>
