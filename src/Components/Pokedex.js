@@ -1,12 +1,17 @@
 import React from 'react'
+import PokemonList from './PokemonList';
 
 export const Pokedex = (props) => {
-  const generation = props.generation;
+  const data = props.data;
 
+  const logData = () => {
+    console.log(data);
+  -  }
   return (
     <div>
       <h3>Pokedex</h3>
-      <h3>{generation}</h3>
+      <button onClick={logData}>Pokedex component data</button>
+      <PokemonList data={data} />
     </div>
   )
 }
