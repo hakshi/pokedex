@@ -3,6 +3,7 @@ import PokemonList from './PokemonList';
 
 export const Pokedex = (props) => {
   const data = props.data;
+  const regionName = data?.main_region?.name;
 
   const logData = () => {
     console.log(data);
@@ -10,7 +11,7 @@ export const Pokedex = (props) => {
 
   return (
     <div>
-      <h3>Pokedex</h3>
+      <h3>Current Region: {regionName}</h3>
       <button onClick={logData}>Pokedex component data</button>
       <PokemonList data={data} />
     </div>

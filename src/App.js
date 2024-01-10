@@ -21,7 +21,7 @@ function App() {
     // Fetch data from the PokeAPI when the generation changes
     axios.get('https://pokeapi.co/api/v2/generation/' + generation)
           .then(response => {
-            setData(response.data.pokemon_species);
+            setData(response.data);
             // TEST LOG
             console.log('Data:', data);
           }).catch(error => {
