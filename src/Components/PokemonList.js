@@ -12,11 +12,12 @@ const PokemonList = ( { data } ) => {
       if (pokemonSpecies) {
         const dataWithIDs = await Promise.all(
           pokemonSpecies.map(async (pokemon) => {
-            const response = await axios.get(pokemon.url);
+            const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemon.name}`);
+            const pokemonDetails = response.data;
             return {
-              id: response.data.id,
-              name: pokemon.name,
-              sprites: pokemon.sprites
+              id: pokemonDetails.id,
+              name: pokemonDetails.name,
+              sprite: pokemonDetails.sprites.front_default
             };
           })
         );
@@ -29,12 +30,12 @@ const PokemonList = ( { data } ) => {
   }, [pokemonSpecies]);
 
   const pokemonElements = pokemonData.map((pokemon, index) => (
-    <div key={index} style={styles.card}>
-      <div style={styles.cardDetails}>
-          <p style={styles.cardDetailItem}>Name: {pokemon.name}</p>
-          <p style={styles.cardDetailaItem}>ID: {pokemon.id}</p>
+    <div key={index} style={styles.cardList}>
+      <div style={styles.card}>
+          <p style={styles.cardDetail}>Name: {pokemon.name}</p>
+          <p style={styles.cardDetailal}>ID: {pokemon.id}</p>
+          <img src={pokemon.sprite} alt={pokemon.name}></img>
       </div>
-      <button onClick={console.log(pokemon.sprites)}>Test Log</button>
     </div>
   ));
 
@@ -49,18 +50,18 @@ const PokemonList = ( { data } ) => {
 export default PokemonList
 
 const styles = {
-  card: {
+  cardList: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     border: '1px solid'
   },
-  cardDetails: {
+  card: {
     display: "flex",
     flexDirection: "row",
     alignItems: "center"
   },
-  cardDetailItem: {
+  cardDetail: {
     flex: 1
   }
 }
