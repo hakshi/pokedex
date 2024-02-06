@@ -1,19 +1,18 @@
 import React from 'react'
-import PokemonList from './PokemonList';
+import PokemonCard from './PokemonCard';
 
-export const Pokedex = (props) => {
-  const data = props.data;
-  const regionName = data?.main_region?.name;
+export const Pokedex = ( { pokemonData } ) => {
 
   const logData = () => {
-    console.log(data);
+    console.log(pokemonData);
   }
 
   return (
     <div>
-      <h3>Current Region: {regionName}</h3>
       <button onClick={logData}>Pokedex component data</button>
-      <PokemonList data={data} />
+      {pokemonData.map((pokemon, index) => (
+        <PokemonCard key={index} pokemon={pokemon} />
+      ))}
     </div>
   )
 }

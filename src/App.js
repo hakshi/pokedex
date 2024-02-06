@@ -5,46 +5,42 @@ import PokedexControlPanel from './Components/PokedexControlPanel';
 import { useState, useEffect} from 'react';
 
 function App() {
-  // State variables
-  const [generation, setGeneration] = useState(1);
-  const [data, setData] = useState([]);
 
-  const handleGenerationChange = (generation) => {
-    setGeneration(generation);
-  };
+  const [pokemonData, setPokemonData] = useState([]);
 
-  const handleDataUpdate = (data) => {
-    setData(data);
+  async function fetchAllPokemon() {
+    const baseUrl = 'https://pokeapi.co/api/v2/pokemon';
+    let allPokemon = [];
+    let offset = 0;
+    const limit = 25;
+    const totalDesiredPokemon = 1025;
+
+    while (allPokemon.length < totalDesiredPokemon) {
+      const url = `${baseUrl}?limit=${limit}&offset=${offset}`;
+
+      try {
+        const response = await axios.get(url);
+        allPokemon = allPokemon.concat(response.data.results);
+        offset += limit;
+      } catch (error) {
+        console.error("Failed to fetch data: ", error);
+      }
+    } 
+
+    console.log(`Fetched ${allPokemon.length} Pokemon.`)
+    setPokemonData(allPokemon);
   }
-  
-  useEffect((data) => {
-    // Fetch data from the PokeAPI when the generation changes
-    axios.get('https://pokeapi.co/api/v2/generation/' + generation)
-          .then(response => {
-            setData(response.data);
-            // TEST LOG
-            console.log('Data:', data);
-          }).catch(error => {
-            console.log('Error fetching data', error);
-          }).finally(() => {
-            console.log('Completed');
-          });
-  }, [generation]);
+
+  // useEffect call to get axios.get to run right on page load.
+  // Empty dependency array makes it so it only calls once on load and not again
+  useEffect(() => {
+    fetchAllPokemon();
+  }, []);
 
   return (
     <div className="App">
       <h1>Hello World</h1>
-      <PokedexControlPanel 
-        generation = {generation}
-        onGenerationChange = {handleGenerationChange}
-        data = {data}
-        onDataChange = {handleDataUpdate}
-      />
-      <Pokedex 
-        generation = {generation}
-        data = {data} 
-        onDataChange = {handleDataUpdate}
-      />
+      <Pokedex pokemonData={pokemonData} />
     </div>
   );
 }
