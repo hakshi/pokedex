@@ -3,13 +3,8 @@ import PokemonCard from './PokemonCard';
 
 export const Pokedex = ( { pokemonData } ) => {
 
-  const logData = () => {
-    console.log(pokemonData);
-  }
-
   return (
-    <div>
-      <button onClick={logData}>Pokedex component data</button>
+    <div className='pokedex'>
       {pokemonData.map((pokemon, index) => (
         <PokemonCard key={index} pokemon={pokemon} />
       ))}

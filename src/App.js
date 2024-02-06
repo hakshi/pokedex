@@ -1,7 +1,6 @@
 import axios from 'axios';
 import './App.css';
 import Pokedex from './Components/Pokedex';
-import PokedexControlPanel from './Components/PokedexControlPanel';
 import { useState, useEffect} from 'react';
 
 function App() {
@@ -13,7 +12,7 @@ function App() {
     let allPokemon = [];
     let offset = 0;
     const limit = 25;
-    const totalDesiredPokemon = 1025;
+    const totalDesiredPokemon = 150;
 
     while (allPokemon.length < totalDesiredPokemon) {
       const url = `${baseUrl}?limit=${limit}&offset=${offset}`;
