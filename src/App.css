@@ -45,6 +45,21 @@
   background-color: #f9f9f9; /* Light background for cards */
 }
 
+.pokemon-card:hover {
+  background-color: yellow;
+}
+
+.pokemon-card-name {
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.pokemon-card-types-container {
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

@@ -4,18 +4,20 @@ import React, { useEffect, useState } from 'react';
 const PokemonCard = ({ pokemon }) => {
 
     const [pokemonSprite, setPokemonSprite] = useState('');
-    const [pokemonBaseExp, setPokemonBaseExp] = useState(0);
+    const [pokemonId, setPokemonId] = useState(0);
     const [pokemonTypes, setPokemonTypes] = useState([]);
 
     const baseUrl = 'https://pokeapi.co/api/v2/pokemon/'
 
-    
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
 
     useEffect(() => {
         const fetchPokemonData = async () => {
             const response = await axios.get(baseUrl + pokemon.name);
             setPokemonSprite(response.data.sprites.front_default)
-            setPokemonBaseExp(response.data.base_experience);
+            setPokemonId(response.data.id);
             setPokemonTypes(response.data.types.map(type => type.type.name));
         };
 
@@ -23,13 +25,15 @@ const PokemonCard = ({ pokemon }) => {
     }, [pokemon.name]);
 
   return (
-    <div className="pokemon-card" id='pokemon-card'>
-      <h2>{pokemon.name}</h2>
+    <div className='pokemon-card' id='pokemon-card'>
+      <h2 className='pokemon-card-name'>{capitalizeFirstLetter(pokemon.name)}</h2>
       <img src={pokemonSprite} alt={pokemon.name}></img>
-      <h3>Base Experience: {pokemonBaseExp}</h3>
-      {pokemonTypes.map((type, index) => (
-        <h3 key={index}>{type}</h3>
-      ))}
+      <h3>{pokemonId}</h3>
+      <div className='pokemon-card-types-container'>
+        {pokemonTypes.map((type, index) => (
+            <h3 className='pokemon-card-types' key={index}>{type}</h3>
+        ))}
+      </div>
     </div>
   );
 }
