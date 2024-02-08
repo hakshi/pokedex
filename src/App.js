@@ -1,45 +1,52 @@
 import axios from 'axios';
 import './App.css';
 import Pokedex from './Components/Pokedex';
-import { useState, useEffect} from 'react';
+import { useState, useEffect, useCallback } from 'react'; // Import useCallback
 
 function App() {
-
   const [pokemonData, setPokemonData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [offset, setOffset] = useState(0);
+  const itemsPerPage = 20;
 
-  async function fetchAllPokemon() {
-    const baseUrl = 'https://pokeapi.co/api/v2/pokemon';
-    let allPokemon = [];
-    let offset = 0;
-    const limit = 25;
-    const totalDesiredPokemon = 150;
+  
+  const fetchPokemonData = useCallback(async () => {
+    if (!hasMore || isLoading) return;
 
-    while (allPokemon.length < totalDesiredPokemon) {
-      const url = `${baseUrl}?limit=${limit}&offset=${offset}`;
+    setIsLoading(true);
+    const url = `https://pokeapi.co/api/v2/pokemon?limit=${itemsPerPage}&offset=${offset}`;
 
-      try {
-        const response = await axios.get(url);
-        allPokemon = allPokemon.concat(response.data.results);
-        offset += limit;
-      } catch (error) {
-        console.error("Failed to fetch data: ", error);
-      }
-    } 
+    try {
+      const response = await axios.get(url);
+      setPokemonData(prevData => [...prevData, ...response.data.results]);
+      setOffset(prevOffset => prevOffset + itemsPerPage);
+      setHasMore(response.data.results.length > 0);
+    } catch (error) {
+      console.error("Failed to fetch data: ", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [hasMore, isLoading, offset, itemsPerPage]); // Dependenciesi
 
-    console.log(`Fetched ${allPokemon.length} Pokemon.`)
-    setPokemonData(allPokemon);
-  }
-
-  // useEffect call to get axios.get to run right on page load.
-  // Empty dependency array makes it so it only calls once on load and not again
   useEffect(() => {
-    fetchAllPokemon();
-  }, []);
+    const handleScroll = () => {
+      if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight || isLoading) return;
+      fetchPokemonData();
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isLoading, fetchPokemonData]); // Added fetchPokemonData as a dependency
+
+  useEffect(() => {
+    fetchPokemonData();
+  }, [fetchPokemonData]); // Added fetchPokemonData as a dependency
 
   return (
     <div className="App">
-      <h1>Hello World</h1>
       <Pokedex pokemonData={pokemonData} />
+      {isLoading && <div>Loading more Pokemon...</div>}
     </div>
   );
 }
